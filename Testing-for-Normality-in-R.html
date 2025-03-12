@@ -1,0 +1,32 @@
+/* Ensure body takes full height and width */
+body {
+  width: 100vw;   /* Full viewport width */
+  height: 100vh;  /* Full viewport height */
+  margin: 0;
+  padding: 0;
+  overflow: hidden;  /* Prevent scrollbars */
+}
+
+/* Remove default margin for html and body */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+/* Header settings */
+header {
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+/* Make main content fill the remaining space */
+main {
+  width: 100%;
+  height: calc(100vh - 150px); /* Adjust based on header height */
+  overflow: auto;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: #f0f0f0; /* Optional background color */
+}

@@ -1,0 +1,95 @@
+---
+title: "Normality Test in R"
+author: "Dr Lindokuhle Dlamini"
+date: "2025-03-12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+getwd()
+setwd("G:/My Drive/Rhodes/2025/Honours 2025/Intro to R Hons 2025")
+library(readxl)
+library(tidyverse)
+library(ggplot2)
+Independent_t_test <- read_excel("Independent t test.xlsx")
+data2025 <- Independent_t_test  # Renaming the dataset for ease of use 
+View(data2025)
+```
+
+Normality Testing Using Visuals
+1. Histogram
+You can use a histogram to visually inspect the distribution of data.
+
+```{r}
+# Basic Histogram
+hist(data2025$`Plant richness`)
+
+# Enhanced Histogram with Normal Distribution Curve
+hist(data2025$`Plant richness`, 
+     probability = TRUE,  # To scale the histogram to show probabilities
+     col = "lightblue",   # Color of the histogram bars
+     main = "Histogram with Normal Distribution", 
+     xlab = "Plant Richness", 
+     border = "black", 
+     ylim = c(0, 0.100))   # Adjust the y-axis to ensure the curve fits
+
+# Add a red line for the normal distribution curve
+curve(dnorm(x, mean = mean(data2025$`Plant richness`), 
+            sd = sd(data2025$`Plant richness`)), 
+      col = "red", 
+      lwd = 3, 
+      add = TRUE)  # Overlay the curve on the histogram
+
+```
+2. Density Plot
+We can create a density plot using both base R and ggplot2.
+
+2.1 Density Plot with ggplot2
+```{r}
+# Density plot using ggplot2
+ggplot(data = data2025, aes(x = `Plant richness`)) + 
+  geom_density() + 
+  theme_classic()
+```
+2.2 Density Plot with Base R
+
+```{r}
+# Create and plot density object in base R
+density_plot <- density(data2025$`Plant richness`)
+plot(density_plot, 
+     main = "Density Plot of Plant Richness", 
+     xlab = "Plant Richness", 
+     ylab = "Density", 
+     col = "blue",   # Color of the density curve
+     lwd = 2)        # Line width
+
+```
+
+3. Q-Q Plot
+A Q-Q plot is a more formal method for inspecting the normality of a dataset.
+
+```{r}
+# Q-Q plot for visual inspection of normality
+qqnorm(data2025$`Plant richness`)
+qqline(data2025$`Plant richness`, col = "red")
+
+```
+Normality Test Statistically
+4. Shapiro-Wilk Test
+The Shapiro-Wilk test is one of the most popular tests for normality. It tests the null hypothesis that the data is normally distributed.
+
+```{r}
+# Shapiro-Wilk Test
+shapiro.test(data2025$`Plant richness`)
+
+```
+5. Kolmogorov-Smirnov Test
+The Kolmogorov-Smirnov test compares the sample distribution to a reference distribution (such as the normal distribution).
+```{r}
+# Kolmogorov-Smirnov Test
+ks.test(data2025$`Plant richness`, "pnorm", mean = mean(data2025$`Plant richness`), sd = sd(data2025$`Plant richness`))
+
+
+```
+Conclusion
+In this analysis, we demonstrated how to visually and statistically test for normality in a dataset using R. First, we used histograms, density plots, and Q-Q plots for visual inspection. Then, we performed the Shapiro-Wilk and Kolmogorov-Smirnov tests to formally assess normality.

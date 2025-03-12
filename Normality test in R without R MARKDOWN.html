@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Normality Testing in R</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #628554;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+        }
+        main {
+            margin: 20px;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            color: #333;
+        }
+        h1.title {
+            font-size: 34px;
+        }
+        h2 {
+            font-size: 30px;
+        }
+        h3 {
+            font-size: 24px;
+        }
+        h4 {
+            font-size: 18px;
+        }
+        h5 {
+            font-size: 16px;
+        }
+        h6 {
+            font-size: 12px;
+        }
+        code {
+            background-color: #d3f5e0; /* Lighter green color */
+            padding: 5px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        pre {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #d5e8cc;
+            color: #fff;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+        .tocify {
+            padding-left: 30px;
+        }
+        .toc-content {
+            padding-right: 40px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 class="title">Normality Testing in R</h1>
+        <p>Visual and Statistical Approaches for Checking Normality</p>
+        <h4 class="author"><em>Dr Lindokuhle Dlamini</em></h4>
+        <h4 class="date"><em>12 March 2025</em></h4>
+    </header>
+
+    <main class="container">
+        <section>
+            <h2>Introduction</h2>
+            <p>This document outlines the process for performing normality testing in R using visual and statistical methods. The dataset used here is based on plant richness.</p>
+        </section>
+
+        <section>
+            <h2>1. Loading the Dataset</h2>
+            <pre><code>
+getwd()
+setwd("G:/My Drive/Rhodes/2025/Honours 2025/Intro to R Hons 2025")
+library(readxl)
+library(tidyverse)
+library(ggplot2)
+Independent_t_test <- read_excel("Independent t test.xlsx")
+
+data2025 <- Independent_t_test  # Renaming the dataset for ease of use
+View(data2025)
+            </code></pre>
+        </section>
+
+        <section>
+            <h2>2. Visual Normality Testing</h2>
+            <p>The following visual methods are used to inspect the normality of the data:</p>
+            
+            <h3>2.1 Histogram</h3>
+            <pre><code>
+# Histogram
+hist(data2025$`Plant richness`)
+            </code></pre>
+            <p>This histogram visually represents the distribution of the "Plant richness" data. It is important to check whether the distribution appears normal or skewed.</p>
+            
+            <h3>2.2 Enhanced Histogram with Normal Distribution Curve</h3>
+            <pre><code>
+# Enhanced Histogram with normal curve
+hist(data2025$`Plant richness`, 
+     probability = TRUE,  
+     col = "lightblue",   
+     main = "Histogram with Normal Distribution", 
+     xlab = "Plant Richness", 
+     border = "black", 
+     ylim = c(0, 0.100))
+
+curve(dnorm(x, mean = mean(data2025$`Plant richness`), 
+            sd = sd(data2025$`Plant richness`)), 
+      col = "red", lwd = 3, add = TRUE)
+            </code></pre>
+            <p>We add a red line to the histogram representing the normal distribution curve.</p>
+            
+            <h3>2.3 Density Plot</h3>
+            <pre><code>
+# Density plot using ggplot2
+ggplot(data = data2025, aes(x = `Plant richness`)) + 
+  geom_density() + theme_classic()
+            </code></pre>
+
+            <h3>2.4 Density Plot using Base R</h3>
+            <pre><code>
+# Density plot in base R
+density_plot <- density(data2025$`Plant richness`)
+plot(density_plot, 
+     main = "Density Plot of Plant Richness", 
+     xlab = "Plant Richness", 
+     ylab = "Density", 
+     col = "blue", 
+     lwd = 2)
+            </code></pre>
+
+            <h3>2.5 Q-Q Plot</h3>
+            <pre><code>
+# Q-Q plot
+qqnorm(data2025$`Plant richness`)
+qqline(data2025$`Plant richness`, col = "red")
+            </code></pre>
+        </section>
+
+        <section>
+            <h2>3. Statistical Normality Testing</h2>
+            <h3>3.1 Shapiro-Wilk Test</h3>
+            <p>The Shapiro-Wilk test is used to formally test for normality.</p>
+            <pre><code>
+# Shapiro-Wilk Test
+shapiro.test(data2025$`Plant richness`)
+            </code></pre>
+
+            <h3>3.2 Kolmogorov-Smirnov Test</h3>
+            <p>The Kolmogorov-Smirnov test compares the sample distribution to a normal distribution.</p>
+            <pre><code>
+# Kolmogorov-Smirnov Test
+ks.test(data2025$`Plant richness`, "pnorm", mean = mean(data2025$`Plant richness`), sd = sd(data2025$`Plant richness`))
+            </code></pre>
+            <!-- Added extra space here -->
+            <p>After running the Kolmogorov-Smirnov Test, you can interpret the result to determine whether the data follows a normal distribution.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Dr. Lindokuhle Dlamini</p>
+    </footer>
+</body>
+</html>

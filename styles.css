@@ -1,0 +1,31 @@
+/* Set body to take full height and width */
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Remove default margins for html and body */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+/* Make the header take full width */
+header {
+  width: 100%;
+  height: auto;
+  text-align: center;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+/* Set the main content to take up the remaining space */
+main {
+  width: 100%;
+  height: calc(100% - 150px); /* Adjust this based on the height of your header */
+  padding: 20px;
+  overflow: auto;
+  box-sizing: border-box;
+}
